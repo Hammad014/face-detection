@@ -1,0 +1,272 @@
+import React, { useState, useEffect } from 'react';
+import ProtectedRoute from '../ProtectedRoute';
+import Header from './Header';
+import Sidebar from './Sidebar';
+
+import {
+  FaCheckCircle,
+  FaTimesCircle,
+  FaCalendarDay,
+  FaCalendarWeek,
+  FaCalendarAlt,
+  FaCalendarMinus,
+  FaSearch,
+} from 'react-icons/fa';
+import { parseISO, format, addHours } from 'date-fns';
+
+const ManageAttendance = () => {
+  // ------------------ SIDEBAR LOGIC ------------------
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+  const closeSidebar = () => setIsSidebarOpen(false);
+
+  // ------------------ ATTENDANCE STATES ------------------
+  const [attendanceRecords, setAttendanceRecords] = useState([]);
+  const [filteredRecords, setFilteredRecords] = useState([]);
+  const [filter, setFilter] = useState('today');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    fetch('http://13.53.130.198:5000/attendance')
+      .then((response) => response.json())
+      .then((data) => {
+        setAttendanceRecords(data);
+        filterRecords('today', data);
+      })
+      .catch((error) =>
+        console.error('Error fetching attendance records:', error)
+      );
+  }, []);
+
+  const formatTime = (time) => {
+    if (!time || time === 'No exit recorded') {
+      return 'No exit recorded';
+    }
+    try {
+      const date = parseISO(time);
+      // Adjust if your server times need shifting, e.g. addHours(date, 5)
+      const datePlus = addHours(date, 5);
+      return format(datePlus, 'yyyy-MM-dd HH:mm:ss');
+    } catch (error) {
+      console.error('Error parsing time:', error);
+      return 'Invalid time';
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    return status === 'Complete' ? (
+      <FaCheckCircle
+        className="text-green-500 inline-block ml-2"
+        title="Complete Attendance"
+      />
+    ) : (
+      <FaTimesCircle
+        className="text-red-500 inline-block ml-2"
+        title="Incomplete Attendance"
+      />
+    );
+  };
+
+  const filterRecords = (newFilter, records) => {
+    const now = new Date();
+    let startDate;
+
+    switch (newFilter) {
+      case 'today':
+        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        break;
+      case 'lastWeek':
+        startDate = new Date(now);
+        startDate.setDate(now.getDate() - 7);
+        break;
+      case 'lastMonth':
+        startDate = new Date(now);
+        startDate.setMonth(now.getMonth() - 1);
+        break;
+      case 'lastYear':
+        startDate = new Date(now);
+        startDate.setFullYear(now.getFullYear() - 1);
+        break;
+      default:
+        startDate = new Date(0);
+        break;
+    }
+
+    const filtered = records.filter((record) => {
+      const detectionDate = new Date(record.detection_date);
+      return detectionDate >= startDate;
+    });
+
+    const searched = filtered.filter((record) =>
+      record.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    setFilteredRecords(searched);
+  };
+
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
+    filterRecords(newFilter, attendanceRecords);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    filterRecords(filter, attendanceRecords);
+  };
+
+  return (
+    <ProtectedRoute>
+      <div className="flex flex-col min-h-screen bg-gray-800 text-white">
+        {/* Header */}
+        <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+
+        <div className="flex flex-1">
+          {/* Sidebar */}
+          <Sidebar isSidebarOpen={isSidebarOpen} closeSidebar={closeSidebar} />
+
+          {/* Main Content */}
+          <main className="flex-1 p-4 md:p-8">
+            <div className="flex items-center justify-center px-2 sm:px-0">
+              {/* Inner Container */}
+              <div className="bg-gray-800 w-full sm:max-w-5xl sm:w-full p-4 sm:p-10 rounded-lg shadow-lg">
+                <h2 className="text-xl sm:text-3xl font-extrabold text-center mb-6 flex items-center justify-center">
+                  <FaCalendarDay className="mr-2 sm:mr-3 text-blue-500" />
+                  Faculty Attendance Management
+                </h2>
+
+                <p className="text-sm sm:text-base text-center text-gray-300 mb-6 sm:mb-8 leading-relaxed">
+                  Faculty attendance is calculated on a daily basis. Faculty members
+                  should be present for at least 8 hours in the university; otherwise,
+                  the attendance will be marked as incomplete.
+                </p>
+
+                {/* Search Bar */}
+                <div className="flex justify-center mb-4 sm:mb-6">
+                  <div className="relative w-full max-w-md">
+                    <FaSearch className="absolute top-3 left-3 text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="Search by Faculty Name..."
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      className="pl-10 pr-4 py-2 w-full bg-gray-700 border border-gray-600 rounded-lg shadow-sm text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Filter Buttons */}
+                <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-6 sm:mb-8">
+                  <button
+                    className={`flex items-center px-2 sm:px-4 py-1 sm:py-2 rounded-lg ${
+                      filter === 'today'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-600 text-gray-300 hover:bg-blue-500'
+                    } transition-colors duration-200`}
+                    onClick={() => handleFilterChange('today')}
+                  >
+                    <FaCalendarDay className="mr-1 sm:mr-2" /> Today
+                  </button>
+                  <button
+                    className={`flex items-center px-2 sm:px-4 py-1 sm:py-2 rounded-lg ${
+                      filter === 'lastWeek'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-600 text-gray-300 hover:bg-blue-500'
+                    } transition-colors duration-200`}
+                    onClick={() => handleFilterChange('lastWeek')}
+                  >
+                    <FaCalendarWeek className="mr-1 sm:mr-2" /> Last Week
+                  </button>
+                  <button
+                    className={`flex items-center px-2 sm:px-4 py-1 sm:py-2 rounded-lg ${
+                      filter === 'lastMonth'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-600 text-gray-300 hover:bg-blue-500'
+                    } transition-colors duration-200`}
+                    onClick={() => handleFilterChange('lastMonth')}
+                  >
+                    <FaCalendarAlt className="mr-1 sm:mr-2" /> Last Month
+                  </button>
+                  <button
+                    className={`flex items-center px-2 sm:px-4 py-1 sm:py-2 rounded-lg ${
+                      filter === 'lastYear'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-600 text-gray-300 hover:bg-blue-500'
+                    } transition-colors duration-200`}
+                    onClick={() => handleFilterChange('lastYear')}
+                  >
+                    <FaCalendarMinus className="mr-1 sm:mr-2" /> Last Year
+                  </button>
+                </div>
+
+                {/* Attendance Records Table */}
+                <div className="overflow-x-auto">
+                  <table className="min-w-full bg-gray-700 border border-gray-600 text-sm sm:text-base">
+                    <thead>
+                      <tr>
+                        <th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-semibold text-gray-300 border-b">
+                          Faculty Name
+                        </th>
+                        <th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-semibold text-gray-300 border-b">
+                          Entry Time
+                        </th>
+                        <th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-semibold text-gray-300 border-b">
+                          Exit Time
+                        </th>
+                        <th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-semibold text-gray-300 border-b">
+                          Attendance Status
+                        </th>
+                        <th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-semibold text-gray-300 border-b">
+                          Detection Date
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredRecords.length > 0 ? (
+                        filteredRecords.map((record) => (
+                          <tr
+                            key={record.id}
+                            className="hover:bg-gray-600 transition-colors"
+                          >
+                            <td className="py-2 sm:py-3 px-2 sm:px-4 border-b text-gray-200">
+                              {record.name}
+                            </td>
+                            <td className="py-2 sm:py-3 px-2 sm:px-4 border-b text-gray-200">
+                              {formatTime(record.entry_time)}
+                            </td>
+                            <td className="py-2 sm:py-3 px-2 sm:px-4 border-b text-gray-200">
+                              {formatTime(record.exit_time)}
+                            </td>
+                            <td className="py-2 sm:py-3 px-2 sm:px-4 border-b text-gray-200 flex items-center">
+                              {record.attendance_status}
+                              {getStatusIcon(record.attendance_status)}
+                            </td>
+                            <td className="py-2 sm:py-3 px-2 sm:px-4 border-b text-gray-200">
+                              {record.detection_date
+                                ? format(new Date(record.detection_date), 'yyyy-MM-dd')
+                                : 'N/A'}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td
+                            className="py-4 px-4 text-center text-gray-400"
+                            colSpan="5"
+                          >
+                            No records found.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </ProtectedRoute>
+  );
+};
+
+export default ManageAttendance;
