@@ -90,7 +90,7 @@ const AdminLogin = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://13.53.130.198:5000/login', {
+      const response = await fetch('http://13.53.130.198:5000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ localStorage.setItem('destination', destination);
               </button>
             </Link>
           </div>
-          <h1>Chlllo bai</h1>
+
 
           {/* Login Container */}
           <div className="bg-gray-800 bg-opacity-60 p-8 rounded-lg shadow-lg w-full max-w-md relative">
