@@ -90,7 +90,7 @@ const AdminLogin = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://13.53.130.198:5000/login', {
+      const response = await fetch('https://13.53.130.198/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
