@@ -16,7 +16,7 @@ const SetSecurityQuestions = () => {
     try {
       const token = localStorage.getItem('token'); // Get the token from localStorage
 
-      const response = await fetch('http://localhost:5000/set-security-questions', {
+      const response = await fetch('https://13.53.130.198/set-security-questions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

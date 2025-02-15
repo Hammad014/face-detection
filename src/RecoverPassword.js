@@ -92,7 +92,7 @@ const RecoverPassword = () => {
     setSuccess('');
 
     try {
-      const response = await fetch('http://localhost:5000/recover-password', {
+      const response = await fetch('https://13.53.130.198/recover-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -126,7 +126,7 @@ const RecoverPassword = () => {
     setSuccess('');
 
     try {
-      const response = await fetch('http://localhost:5000/recover-password-email', {
+      const response = await fetch('https://13.53.130.198/recover-password-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -155,7 +155,7 @@ const RecoverPassword = () => {
     setSuccess('');
 
     try {
-      const response = await fetch('http://localhost:5000/verify-otp', {
+      const response = await fetch('https://13.53.130.198/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp }), 
@@ -201,7 +201,7 @@ const RecoverPassword = () => {
     const finalUsername = questionsAnswered ? userName : retrievedUsername;
 
     try {
-      const response = await fetch('http://localhost:5000/update-password', {
+      const response = await fetch('https://13.53.130.198/update-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
