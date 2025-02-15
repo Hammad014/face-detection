@@ -19,7 +19,7 @@ const DisciplineCases = () => {
   useEffect(() => {
     const fetchDisciplineCases = async () => {
       try {
-        const response = await fetch('http://13.53.130.198:5000/discipline-cases');
+        const response = await fetch('https://13.53.130.198/discipline-cases');
         if (!response.ok) {
           throw new Error('Failed to fetch discipline cases.');
         }

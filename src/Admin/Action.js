@@ -20,7 +20,7 @@ const Action = () => {
   const closeSidebar = () => setIsSidebarOpen(false);
 
   useEffect(() => {
-    fetch("http://13.53.130.198:5000/alerts")
+    fetch("https://13.53.130.198/alerts")
       .then((res) => res.json())
       .then((data) => {
         const unknownOnly = data.filter((alert) => alert.name === "Unknown");
@@ -68,7 +68,7 @@ const Action = () => {
 
   const handleSendOnWhatsApp = () => {
     const text = `Detection Alert:\n\nDetection Date: ${new Date(selectedAlert.timestamp).toLocaleDateString()}\nDetection Time: ${new Date(selectedAlert.timestamp).toLocaleTimeString()}`;
-    const imageUrl = `http://13.53.130.198:5000${selectedAlert.additionalInfo.image_path}`;
+    const imageUrl = `https://13.53.130.198${selectedAlert.additionalInfo.image_path}`;
     const message = `${text}\nImage URL: ${imageUrl}`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
@@ -105,7 +105,7 @@ const Action = () => {
                         </p>
                         {alert.additionalInfo?.image_path && (
                           <img
-                            src={`http://13.53.130.198:5000${alert.additionalInfo.image_path}`}
+                            src={`https://13.53.130.198${alert.additionalInfo.image_path}`}
                             alt="Unknown Person"
                             className="rounded-xl shadow-md w-full"
                           />
@@ -174,7 +174,7 @@ const Action = () => {
                 <h2 className="text-2xl font-bold mb-6 text-gray-100">Take Action</h2>
                 <div className="mb-6">
                   <img
-                    src={`http://13.53.130.198:5000${selectedAlert.additionalInfo.image_path}`}
+                    src={`https://13.53.130.198${selectedAlert.additionalInfo.image_path}`}
                     alt="Unknown Person"
                     className="rounded-xl shadow-md mb-4"
                   />

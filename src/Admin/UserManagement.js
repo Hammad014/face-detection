@@ -17,7 +17,7 @@ const UserManagement = () => {
     try {
       const token = localStorage.getItem('token'); // Ensure token is stored on login
       const response = await axios.post(
-        'http://localhost:5000/register',
+        'https://13.53.130.198/register',
         { username, password, role },
         {
           headers: { Authorization: `Bearer ${token}` },

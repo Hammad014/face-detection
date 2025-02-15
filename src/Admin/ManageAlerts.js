@@ -45,7 +45,7 @@ const ManageAlerts = () => {
   // --------------------- Fetch Alerts & Settings ---------------------
   useEffect(() => {
     // Fetch alerts
-    fetch('http://13.53.130.198:5000/alerts')
+    fetch('https://13.53.130.198/alerts')
       .then((res) => res.json())
       .then((data) => {
         const parsedData = data.map((alert) => ({
@@ -63,7 +63,7 @@ const ManageAlerts = () => {
       });
 
     // Fetch known alerts setting
-    fetch('http://13.53.130.198:5000/settings/known_alerts_enabled')
+    fetch('https://13.53.130.198/settings/known_alerts_enabled')
       .then((res) => res.json())
       .then((data) => {
         if (data && data.value) {
@@ -244,7 +244,7 @@ const ManageAlerts = () => {
 
     const newValue = toggleSetting === 'disable' ? 'false' : 'true';
 
-    fetch('http://13.53.130.198:5000/settings/known_alerts_enabled', {
+    fetch('https://13.53.130.198/settings/known_alerts_enabled', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ value: newValue }),
@@ -614,7 +614,7 @@ const ManageAlerts = () => {
                                   <strong>Date of Detection:</strong> {dateString}
                                 </p>
                                 <img
-                                  src={`http://localhost:5000${additionalInfo.image_path}`}
+                                  src={`https://13.53.130.198${additionalInfo.image_path}`}
                                   alt="Unknown Person"
                                   className="mt-4 rounded-lg shadow-md w-full h-auto max-w-sm"
                                 />

@@ -43,7 +43,7 @@ const AdminDashboard = () => {
   // Example: Fetch chart data from backend (adjust to your own endpoints)
   useEffect(() => {
     // 1) Fetch User Registrations
-    fetch('http://13.53.130.198:5000/api/stats/user-registrations')
+    fetch('https://13.53.130.198/api/stats/user-registrations')
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error fetching user registrations`);
@@ -69,7 +69,7 @@ const AdminDashboard = () => {
       .catch((error) => console.error(error));
 
     // 2) Fetch Alerts Data
-    fetch('http://13.53.130.198:5000/api/stats/alerts-over-time')
+    fetch('https://13.53.130.198/api/stats/alerts-over-time')
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error fetching alerts-over-time`);

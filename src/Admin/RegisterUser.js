@@ -86,7 +86,7 @@ const RegisterUser = () => {
     }
 
     try {
-      const response = await fetch('http://13.53.130.198:5000/register', {
+      const response = await fetch('https://13.53.130.198/register', {
         method: 'POST',
         body: formDataObj,
       });

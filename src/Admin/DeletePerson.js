@@ -46,7 +46,7 @@ const DeletePerson = () => {
     setIsChecking(true);
 
     try {
-      const response = await fetch(`http://13.53.130.198:5000/check-person`, {
+      const response = await fetch(`https://13.53.130.198/check-person`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ const DeletePerson = () => {
     setIsError(false);
 
     try {
-      const response = await fetch(`http://13.53.130.198:5000/delete-person`, {
+      const response = await fetch(`https://13.53.130.198/delete-person`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

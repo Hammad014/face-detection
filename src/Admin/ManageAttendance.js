@@ -27,7 +27,7 @@ const ManageAttendance = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    fetch('http://13.53.130.198:5000/attendance')
+    fetch('https://13.53.130.198/attendance')
       .then((response) => response.json())
       .then((data) => {
         setAttendanceRecords(data);

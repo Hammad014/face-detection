@@ -75,7 +75,7 @@ const UpdatePerson = () => {
   // Fetch person data
   const handleFetchPerson = async () => {
     try {
-      const response = await fetch('http://13.53.130.198:5000/fetch-person', {
+      const response = await fetch('https://13.53.130.198/fetch-person', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -226,7 +226,7 @@ const UpdatePerson = () => {
     }
 
     try {
-      const response = await fetch('http://13.53.130.198:5000/update-person', {
+      const response = await fetch('https://13.53.130.198/update-person', {
         method: 'POST',
         body: formDataObj,
       });
@@ -266,7 +266,7 @@ const UpdatePerson = () => {
   // Remove discipline case from DB
   const removeDisciplineCase = async () => {
     try {
-      const response = await fetch('http://13.53.130.198:5000/remove-discipline-case', {
+      const response = await fetch('https://13.53.130.198/remove-discipline-case', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
