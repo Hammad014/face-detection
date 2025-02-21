@@ -1,9 +1,6 @@
-// // src/App.js
-
-
-// src/App.js
-import React, { useEffect, useRef } from 'react';
-import * as THREE from 'three';
+import React from 'react';
+import { useLottie } from 'lottie-react';
+import artificialAnimation from './lotties/ai-model-operation.json';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import MainPage from './FaceTraceMain';
@@ -24,135 +21,44 @@ import ProtectedRoute from './ProtectedRoute';
 import NotFound from './utilities/NotFound';
 import AuthProvider from './AuthContext';
 import Settings from './utilities/Settings';
+import Documentation from './Documentation';
 import Action from './Admin/Action';
 import './index.css';
 
 const pageVariants = {
   initial: { opacity: 0, y: 50 },
   in: { opacity: 1, y: 0 },
-  out: { opacity: 0, y: -50 }
+  out: { opacity: 0, y: -50 },
 };
 
 const pageTransition = {
   type: 'tween',
   ease: 'easeInOut',
-  duration: 0.5
+  duration: 0.5,
 };
 
-const ParticleBackground = () => {
-  const mountRef = useRef(null);
+/**
+ * This component now ONLY displays the Lottie AI animation,
+ * centered on the page. All Three.js / background particles
+ * have been removed.
+ */
+const CenteredAIAnimation = () => {
+  const options = {
+    animationData: artificialAnimation,
+    loop: true,
+    autoplay: true,
+  };
 
-  useEffect(() => {
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ 
-      alpha: true, 
-      antialias: true,
-      powerPreference: "high-performance"
-    });
-    
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 0);
-    
-    if (mountRef.current) {
-      mountRef.current.appendChild(renderer.domElement);
-    }
+  const { View } = useLottie(options);
 
-    // Particles setup
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particleCount = 1000;
-    const posArray = new Float32Array(particleCount * 3);
-    const colors = [];
-    const colorPalette = [
-      new THREE.Color(0x1a1a2e),
-      new THREE.Color(0x16213e),
-      new THREE.Color(0x0f3460),
-      new THREE.Color(0xe94560)
-    ];
-
-    for(let i = 0; i < particleCount; i++) {
-      posArray[i * 3] = (Math.random() - 0.5) * 10;
-      posArray[i * 3 + 1] = (Math.random() - 0.5) * 10;
-      posArray[i * 3 + 2] = (Math.random() - 0.5) * 10;
-
-      const color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
-      colors.push(color.r, color.g, color.b);
-    }
-
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    particlesGeometry.setAttribute('color', new THREE.BufferAttribute(new Float32Array(colors), 3));
-
-    const particlesMaterial = new THREE.PointsMaterial({
-      size: 0.02,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.8
-    });
-
-    const particleMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particleMesh);
-
-    // Neural connections
-    const linesGeometry = new THREE.BufferGeometry();
-    const linePositions = new Float32Array(particleCount * 3);
-    let index = 0;
-
-    for(let i = 0; i < particleCount; i++) {
-      if(Math.random() > 0.97) {
-        linePositions[index++] = posArray[i * 3];
-        linePositions[index++] = posArray[i * 3 + 1];
-        linePositions[index++] = posArray[i * 3 + 2];
-        linePositions[index++] = posArray[(i+1) * 3 % particleCount];
-        linePositions[index++] = posArray[(i+1) * 3 + 1 % particleCount];
-        linePositions[index++] = posArray[(i+1) * 3 + 2 % particleCount];
-      }
-    }
-
-    linesGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
-    const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0x4f8bf5,
-      transparent: true,
-      opacity: 0.15
-    });
-
-    const lineMesh = new THREE.LineSegments(linesGeometry, lineMaterial);
-    scene.add(lineMesh);
-
-    camera.position.z = 5;
-
-    // Animation loop
-    const animate = () => {
-      requestAnimationFrame(animate);
-      
-      particleMesh.rotation.x += 0.0005;
-      particleMesh.rotation.y += 0.0005;
-      lineMesh.rotation.x += 0.0005;
-      lineMesh.rotation.y += 0.0005;
-
-      renderer.render(scene, camera);
-    };
-
-    animate();
-
-    // Handle window resize
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      if (mountRef.current && renderer.domElement) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
-    };
-  }, []);
-
-  return <div ref={mountRef} className="fixed top-0 left-0 w-full h-full z-0" />;
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-0 opacity-5">
+      {/* Adjust width/height as needed, or leave it auto. */}
+      <div style={{ width: '800px', height: '800px'}}>
+        {View}
+      </div>
+    </div>
+  );
 };
 
 function App() {
@@ -160,83 +66,166 @@ function App() {
 
   return (
     <div className="app-container relative min-h-screen">
-      <ParticleBackground />
-      
+      {/* Only the AI Animation, centered on the page */}
+      <CenteredAIAnimation />
+
       <div className="relative z-10">
         <AuthProvider>
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
               {/* Public Routes */}
-              <Route path="/" element={
-                <motion.div initial="initial" animate="in" exit="out" variants={pageVariants} transition={pageTransition}>
-                  <MainPage />
-                </motion.div>
-              } />
-              
-              <Route path="/login" element={
-                <motion.div initial="initial" animate="in" exit="out" variants={pageVariants} transition={pageTransition}>
-                  <AdminLogin />
-                </motion.div>
-              } />
-              
-              <Route path="/login/set-security-questions" element={
-                <motion.div initial="initial" animate="in" exit="out" variants={pageVariants} transition={pageTransition}>
-                  <SetSecurityQuestions />
-                </motion.div>
-              } />
-              
-              <Route path="/login/recover-password" element={
-                <motion.div initial="initial" animate="in" exit="out" variants={pageVariants} transition={pageTransition}>
-                  <RecoverPassword />
-                </motion.div>
-              } />
+              <Route
+                path="/"
+                element={
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <MainPage />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/documentation"
+                element={
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <Documentation />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/login"
+                element={
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <AdminLogin />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/login/set-security-questions"
+                element={
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <SetSecurityQuestions />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/login/recover-password"
+                element={
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <RecoverPassword />
+                  </motion.div>
+                }
+              />
 
               {/* Protected Admin Routes */}
-              <Route path="/admin-dashboard/*" element={
-                <ProtectedRoute roles={['admin']}>
-                  <motion.div initial="initial" animate="in" exit="out" variants={pageVariants} transition={pageTransition}>
-                    <Routes>
-                      <Route index element={<AdminDashboard />} />
-                      <Route path="register-user" element={<RegisterUser />} />
-                      <Route path="update-person" element={<UpdatePerson />} />
-                      <Route path="delete-person" element={<DeletePerson />} />
-                      <Route path="manage-alerts" element={<ManageAlerts />} />
-                      <Route path="manage-attendance" element={<ManageAttendance />} />
-                      <Route path="discipline-cases" element={<DisciplineCases />} />
-                      <Route path="settings" element={<Settings />} />
-                      <Route path="camera-scan" element={<CameraScan />} />
-                    </Routes>
-                  </motion.div>
-                </ProtectedRoute>
-              } />
+              <Route
+                path="/admin-dashboard/*"
+                element={
+                  <ProtectedRoute roles={['admin']}>
+                    <motion.div
+                      initial="initial"
+                      animate="in"
+                      exit="out"
+                      variants={pageVariants}
+                      transition={pageTransition}
+                    >
+                      <Routes>
+                        <Route index element={<AdminDashboard />} />
+                        <Route path="register-user" element={<RegisterUser />} />
+                        <Route path="update-person" element={<UpdatePerson />} />
+                        <Route path="delete-person" element={<DeletePerson />} />
+                        <Route path="manage-alerts" element={<ManageAlerts />} />
+                        <Route path="manage-attendance" element={<ManageAttendance />} />
+                        <Route path="discipline-cases" element={<DisciplineCases />} />
+                        <Route path="settings" element={<Settings />} />
+                        <Route path="camera-scan" element={<CameraScan />} />
+                      </Routes>
+                    </motion.div>
+                  </ProtectedRoute>
+                }
+              />
 
               {/* Protected Security In-Charge Routes */}
-              <Route path="/incharge-dashboard/*" element={
-                <ProtectedRoute roles={['security_incharge']}>
-                  <motion.div initial="initial" animate="in" exit="out" variants={pageVariants} transition={pageTransition}>
-                    <Routes>
-                      <Route index element={<InchargeDashboard />} />
-                      <Route path="manage-alerts" element={<ManageAlerts />} />
-                      <Route path="discipline-cases" element={<DisciplineCases />} />
-                      <Route path="action" element={<Action />} />
-                      <Route path="camera-scan" element={<CameraScan />} />
-                    </Routes>
-                  </motion.div>
-                </ProtectedRoute>
-              } />
+              <Route
+                path="/incharge-dashboard/*"
+                element={
+                  <ProtectedRoute roles={['security_incharge']}>
+                    <motion.div
+                      initial="initial"
+                      animate="in"
+                      exit="out"
+                      variants={pageVariants}
+                      transition={pageTransition}
+                    >
+                      <Routes>
+                        <Route index element={<InchargeDashboard />} />
+                        <Route path="manage-alerts" element={<ManageAlerts />} />
+                        <Route path="discipline-cases" element={<DisciplineCases />} />
+                        <Route path="action" element={<Action />} />
+                        <Route path="camera-scan" element={<CameraScan />} />
+                      </Routes>
+                    </motion.div>
+                  </ProtectedRoute>
+                }
+              />
 
-              {/* Error Routes */}
-              <Route path="/unauthorized" element={
-                <motion.div initial="initial" animate="in" exit="out" variants={pageVariants} transition={pageTransition}>
-                  <Unauthorized />
-                </motion.div>
-              } />
-              
-              <Route path="*" element={
-                <motion.div initial="initial" animate="in" exit="out" variants={pageVariants} transition={pageTransition}>
-                  <NotFound />
-                </motion.div>
-              } />
+              {/* Error / Fallback Routes */}
+              <Route
+                path="/unauthorized"
+                element={
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <Unauthorized />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="*"
+                element={
+                  <motion.div
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                  >
+                    <NotFound />
+                  </motion.div>
+                }
+              />
             </Routes>
           </AnimatePresence>
         </AuthProvider>
@@ -246,6 +235,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

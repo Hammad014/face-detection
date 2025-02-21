@@ -299,7 +299,7 @@ const UpdatePerson = () => {
   return (
     <ProtectedRoute>
       {/* Outer layout container (similar to AdminDashboard) */}
-      <div className="flex flex-col min-h-screen bg-gray-700 text-white">
+      <div className="flex overflow-x-hidden overflow-y-hidden flex-col min-h-screen bg-gray-800 text-white">
         {/* Header */}
         <Header 
           toggleSidebar={toggleSidebar}
@@ -333,7 +333,7 @@ const UpdatePerson = () => {
                     value={entityType}
                     onChange={handleEntityChange}
                     required
-                    className="mt-1 block w-full p-3 bg-gray-800 border border-gray-700 rounded-lg shadow-sm text-white"
+                    className="mt-1 block w-full p-3 bg-gray-700 border border-gray-700 rounded-lg shadow-sm text-white"
                   >
                     <option value="">Select Entity Type</option>
                     <option value="student">Student</option>
@@ -362,7 +362,7 @@ const UpdatePerson = () => {
                     value={uniqueValue}
                     onChange={(e) => setUniqueValue(e.target.value)}
                     required
-                    className="mt-1 block w-full p-3 bg-gray-800 border border-gray-700 rounded-lg shadow-sm text-white"
+                    className="mt-1 block w-full p-3 bg-gray-700 border border-gray-700 rounded-lg shadow-sm text-white"
                     disabled={fetchSuccess} // Disable after successful fetch
                   />
                 </div>

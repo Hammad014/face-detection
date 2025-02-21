@@ -102,7 +102,7 @@ const AdminDashboard = () => {
 
   return (
     <ProtectedRoute>
-      <div className="m-auto flex flex-col justify-center text-white bg-gray-800 min-h-screen">
+      <div className=" flex max-w-full overflow-x-hidden flex-col justify-center text-white bg-gray-800 min-h-screen">
         {/* Header */}
         <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
 

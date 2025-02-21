@@ -126,7 +126,7 @@ const RegisterUser = () => {
   return (
     <ProtectedRoute>
       {/* Outer container similar to AdminDashboard */}
-      <div className="flex flex-col min-h-screen bg-gray-800 text-white">
+      <div className="flex overflow-x-hidden overflow-y-hidden flex-col min-h-screen bg-gray-800 text-white">
         
         {/* Reusable Header */}
         <Header 

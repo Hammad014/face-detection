@@ -39,7 +39,7 @@ const DisciplineCases = () => {
   return (
     <ProtectedRoute>
       {/* Outer layout container */}
-      <div className="flex flex-col min-h-screen bg-gray-800 text-white">
+      <div className="flex overflow-x-hidden overflow-y-hidden flex-col min-h-screen bg-gray-800 text-white">
         {/* Header */}
         <Header 
           toggleSidebar={toggleSidebar}

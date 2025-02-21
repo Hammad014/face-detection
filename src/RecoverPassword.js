@@ -234,12 +234,14 @@ const RecoverPassword = () => {
       {/* Header + Logo */}
       <div className="flex justify-between items-center">
         <div className="h-28 w-28 m-4">
+          <Link to="/">
           <img src="/face-trace-logo.png" alt="Logo" />
+          </Link>
         </div>
         <div className="flex justify-end p-4 mr-5">
           <Link to="/login">
             <button className="flex m-6 items-center text-white hover:bg-gray-600 border border-gray-400 rounded-3xl px-4 py-3 transition duration-200">
-              <FaArrowLeft className="mr-2" /> Back to Login
+              <FaArrowLeft className="mr-2" /> Back
             </button>
           </Link>
         </div>
@@ -263,13 +265,13 @@ const RecoverPassword = () => {
                 onClick={() => handleRecoveryMethodSelection('email')}
                 className="flex items-center bg-slate-800 py-5 px-4 border-t-2 text-white font-semibold shadow-md hover:bg-slate-700"
               >
-                <FaEnvelope className="mr-2" /> Recover through Email
+                <FaEnvelope className="mr-2" /> Email
               </button>
               <button
                 onClick={() => handleRecoveryMethodSelection('security')}
                 className="flex items-center bg-slate-800 py-5 px-4 border-t-2 text-white font-semibold shadow-md hover:bg-slate-700"
               >
-                <FaQuestionCircle className="mr-2" /> Recover through Security Questions
+                <FaQuestionCircle className="mr-2" /> Security Questions
               </button>
             </div>
           )}

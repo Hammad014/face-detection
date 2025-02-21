@@ -286,7 +286,7 @@ const ManageAlerts = () => {
   // --------------------- RENDER ---------------------
   return (
     <ProtectedRoute>
-      <div className="flex flex-col min-h-screen bg-gray-800 text-black">
+      <div className="flex overflow-x-hidden flex-col min-h-screen bg-gray-800 text-black">
         {/* Header */}
         <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
 

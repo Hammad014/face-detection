@@ -34,7 +34,7 @@ code {
   z-index: -1;
 }  */
 
-.particles {
+/* .particles {
   position: absolute;
   top: 0;
   left: 0;
@@ -50,4 +50,4 @@ code {
 @keyframes moveBackground {
   from { background-position: 0 0, 10px 10px; }
   to { background-position: 20px 20px, 30px 30px; }
-}
+} */

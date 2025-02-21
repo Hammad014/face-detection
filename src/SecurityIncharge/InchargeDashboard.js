@@ -328,7 +328,7 @@ const InchargeDashboard = () => {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
+      <div className="flex overflow-x-hidden overflow-y-hidden flex-col min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
         <header className="bg-gradient-to-r from-gray-800 to-gray-900 p-4 md:p-6 shadow-xl flex flex-col md:flex-row justify-between items-center sticky top-0 z-50">
           <div className="flex items-center w-full justify-between">
             <div className="flex items-center space-x-4">
